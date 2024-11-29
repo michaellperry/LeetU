@@ -28,7 +28,7 @@ public static class EntityToModel
         student.Id = entity.Id;
         student.Name = entity.Name;
         student.Surname = entity.Surname;
-        student.DateOfBirth = DateTime.ParseExact(entity.DateOfBirth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        student.DateOfBirth = DateTime.ParseExact(entity.DateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture);
         student.Sex = (Sex)entity.Sex;
         student.Address = CreateAddressFromEntity(entity.Address);
 
