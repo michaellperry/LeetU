@@ -13,7 +13,7 @@ public class EntityToModelTests
             Id = 1,
             Name = "Test Course",
             Description = "Test Description",
-            StartDate = "01/01/2021"
+            StartDate = "1/1/2021"
         };
 
         var courseModel = Mappers.EntityToModel.CreateCourseFromEntity(courseEntity);

@@ -72,7 +72,7 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
         //Assert
         Assert.Equal("NewCourse", course!.Name);
         Assert.Equal("NewCourseDescription", course.Description);
-        Assert.Equal("01/01/2021", course.StartDate.ToShortDateString());
+        Assert.Equal("1/1/2021", course.StartDate.ToShortDateString());
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
         //Assert
         Assert.Equal("UpdatedCourseName", updatedCourse!.Name);
         Assert.Equal("UpdatedCourseDescription", updatedCourse.Description);
-        Assert.Equal("01/01/2021", updatedCourse.StartDate.ToShortDateString());
+        Assert.Equal("1/1/2021", updatedCourse.StartDate.ToShortDateString());
     }
 
     [Fact]
