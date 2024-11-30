@@ -90,7 +90,8 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
         course.Description = "UpdatedCourseDescription";
         course.StartDate = DateTime.Parse("01/01/2021");
         await sut.UpdateCourseAsync(course);
-        var updatedCourse = courses.FirstOrDefault();
+        var updatedCourses = await sut.GetCourses(course!.Id);
+        var updatedCourse = updatedCourses.FirstOrDefault();
         //Assert
         Assert.Equal("UpdatedCourseName", updatedCourse!.Name);
         Assert.Equal("UpdatedCourseDescription", updatedCourse.Description);
