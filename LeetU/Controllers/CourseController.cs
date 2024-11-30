@@ -62,4 +62,16 @@ public class CourseController : ControllerBase
 
         return Ok();
     }
+
+    [Route("{courseId}")]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteCourse([FromRoute] long courseId)
+    {
+        var courseFound = await _courseService.DeleteCourseAsync(courseId);
+
+        if (!courseFound)
+            return NotFound();
+
+        return Ok();
+    }
 }

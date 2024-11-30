@@ -41,17 +41,17 @@ public class CourseService : ICourseService
         return rowsAffected > 0;
     }
 
-    public async Task<int> DeleteCourseAsync(long courseId)
+    public async Task<bool> DeleteCourseAsync(long courseId)
     {
         var entity = _courseRepository.Get(c => c.Id == courseId).FirstOrDefault();
         if (entity == null)
-            return 0;
+            return false;
 
         if (entity.StudentCourses.Any())
             throw new Exception("Cannot delete a course that has students enrolled in it");
 
         _courseRepository.Delete(entity);
         var rowsAffected = await _courseRepository.SaveChangesAsync();
-        return rowsAffected;
+        return rowsAffected > 0;
     }
 }
