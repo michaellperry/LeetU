@@ -13,5 +13,10 @@ namespace LeetU.Data.Repositories
         public CourseRepository(StudentContext context) : base(context)
         {
         }
+
+        public IQueryable<T> Set<T>() where T : class
+        {
+            return Context.Set<T>();
+        }
     }
 }

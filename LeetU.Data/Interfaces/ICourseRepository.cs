@@ -2,6 +2,6 @@
 
 namespace LeetU.Data.Interfaces;
 
-public interface ICourseRepository : IRepositoryCrud<Course>
+public interface ICourseRepository : IRepositoryCrud<Course>, IRepository
 {
 }
