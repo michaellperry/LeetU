@@ -1,6 +1,7 @@
 ﻿using LeetU.Data.Context;
 using LeetU.Data.Entities;
 using LeetU.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LeetU.Data.Repositories
 {
@@ -14,7 +15,7 @@ namespace LeetU.Data.Repositories
         {
         }
 
-        public IQueryable<T> Set<T>() where T : class
+        public DbSet<T> Set<T>() where T : class
         {
             return Context.Set<T>();
         }
