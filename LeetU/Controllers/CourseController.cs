@@ -49,4 +49,17 @@ public class CourseController : ControllerBase
 
         throw new Exception("There was an error creating the course");
     }
+
+    [Route("{courseId}")]
+    [HttpPut]
+    public async Task<IActionResult> UpdateCourse([FromRoute] long courseId, [FromBody] Course course)
+    {
+        course.Id = courseId;
+        var courseFound = await _courseService.UpdateCourseAsync(course);
+
+        if (!courseFound)
+            return NotFound();
+
+        return Ok();
+    }
 }

@@ -1,4 +1,4 @@
-﻿using LeetU.Data.Interfaces;
+using LeetU.Data.Interfaces;
 using LeetU.Models;
 using LeetU.Services.Interfaces;
 using LeetU.Services.Mappers;
@@ -33,12 +33,12 @@ public class CourseService : ICourseService
         return rowsAffected;
     }
     
-    public async Task<int> UpdateCourseAsync(Course course)
+    public async Task<bool> UpdateCourseAsync(Course course)
     {
         var entity = ModelToEntity.UpdateEntityFromCourse(_courseRepository.Get(c => c.Id == course.Id).FirstOrDefault()!, course);
         _courseRepository.Update(entity);
         var rowsAffected = await _courseRepository.SaveChangesAsync();
-        return rowsAffected;
+        return rowsAffected > 0;
     }
 
     public async Task<int> DeleteCourseAsync(long courseId)
