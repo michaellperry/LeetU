@@ -22,9 +22,9 @@ public class StudentController : ControllerBase
 
     [Route("{studentId}")]
     [HttpGet]
-    public IActionResult GetStudent([FromRoute] long studentId)
+    public async Task<IActionResult> GetStudent([FromRoute] long studentId)
     {
-        var students = _studentService.GetStudents(studentId);
+        var students = await _studentService.GetStudents(studentId);
         var student = students.FirstOrDefault();
 
         return student == null ? new NotFoundResult() : new OkObjectResult(student);
@@ -32,17 +32,17 @@ public class StudentController : ControllerBase
 
     [Route("")]
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var students = _studentService.GetStudents();
+        var students = await _studentService.GetStudents();
         return new OkObjectResult(students);
     }
 
     [Route("{studentId}/course")]
     [HttpGet]
-    public IActionResult GetStudentWithCourses([FromRoute] long studentId)
+    public async Task<IActionResult> GetStudentWithCourses([FromRoute] long studentId)
     {
-        var students = _studentService.GetStudentsWithCourses(studentId).ToList();
+        var students = await _studentService.GetStudentsWithCourses(studentId);
         return !students.Any() ? new NotFoundResult() : new OkObjectResult(students.FirstOrDefault());
     }
 

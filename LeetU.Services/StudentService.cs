@@ -25,7 +25,7 @@ public class StudentService : IStudentService
         _courseRepository = courseRepository;
     }
 
-    public bool HasCourse(long studentId, long courseId)
+    public async Task<bool> HasCourse(long studentId, long courseId)
     {
         return _studentCourseRepositoryCrud.HasCourse(studentId, courseId);
     }
@@ -46,22 +46,22 @@ public class StudentService : IStudentService
         return rowsAffected;
     }
 
-    public IEnumerable<StudentWithCourses> GetStudentsWithCourses(params long[] studentIds)
+    public async Task<IEnumerable<StudentWithCourses>> GetStudentsWithCourses(params long[] studentIds)
     {
         var entities = _studentCourseRepositoryCrud.Get(s => studentIds.Any(id => s.StudentId == id) || studentIds.Length == 0, null, "Student", "Course", "Student.Address");
 
         var groupedCourses = entities.GroupBy(g => g.Student);
 
-        foreach (var group in groupedCourses)
+        return groupedCourses.Select(group =>
         {
             var student = group.Key;
-            var studentWithCourses = EntityToModel.CreateStudentFromEntity<StudentWithCourses>(student) ;
+            var studentWithCourses = EntityToModel.CreateStudentFromEntity<StudentWithCourses>(student);
             var courses = group.Select(x => x.Course);
 
             studentWithCourses.Courses = EntityToModel.CreateCoursesFromEntities(courses);
 
-            yield return studentWithCourses;
-        }
+            return studentWithCourses;
+        }).ToList();
     }
 
     public async Task<int> SetStudentCourseAsync(long studentId, long courseId)
@@ -87,11 +87,12 @@ public class StudentService : IStudentService
         return rowsAffected;
     }
 
-    public IEnumerable<Student> GetStudents(params long[] studentIds)
+    public async Task<IEnumerable<Student>> GetStudents(params long[] studentIds)
     {
         var entities = _studentRepositoryCrud.Get(s => studentIds.Any(id => s.Id == id) || studentIds.Length == 0, null, "Address");
 
-        foreach (var entity in entities)
-            yield return EntityToModel.CreateStudentFromEntity<Student>(entity);
+        return entities
+            .Select(EntityToModel.CreateStudentFromEntity<Student>)
+            .ToList();
     }
 }

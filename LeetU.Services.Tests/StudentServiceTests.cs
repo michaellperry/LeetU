@@ -1,10 +1,9 @@
-using System.Linq;
-using System.Net.Security;
-using System.Threading.Tasks;
 using LeetU.Data.Repositories;
 using LeetU.Data.Tests.DataContext;
 using LeetU.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -23,7 +22,7 @@ public class StudentServiceTests : IClassFixture<InMemoryDbContext>
     }
 
     [Fact]
-    public void ShouldGetStudents()
+    public async Task ShouldGetStudents()
     {
         //Arrange
         _context.Reset();
@@ -32,7 +31,8 @@ public class StudentServiceTests : IClassFixture<InMemoryDbContext>
             new CourseRepository(_context.StudentContext));
 
         //Act
-        var students = sut.GetStudents().ToArray();
+        var allStudents = await sut.GetStudents();
+        var students = allStudents.ToArray();
 
         //Assert
         Assert.Equal(_context.StudentContext.Students.Count(), students.Count());
@@ -47,7 +47,7 @@ public class StudentServiceTests : IClassFixture<InMemoryDbContext>
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void ShouldGetStudentsById(int studentId)
+    public async Task ShouldGetStudentsById(int studentId)
     {
         //Arrange
         _context.Reset();
@@ -56,14 +56,15 @@ public class StudentServiceTests : IClassFixture<InMemoryDbContext>
             new CourseRepository(_context.StudentContext));
 
         //Act
-        var student = sut.GetStudents(studentId).FirstOrDefault();
+        var students = await sut.GetStudents(studentId);
+        var student = students.FirstOrDefault();
 
         //Assert
         Assert.Equal(studentId, student!.Id);
     }
 
     [Fact]
-    public void ShouldGetStudentsWithCourses()
+    public async Task ShouldGetStudentsWithCourses()
     {
         //Arrange
         _context.Reset();
@@ -72,7 +73,7 @@ public class StudentServiceTests : IClassFixture<InMemoryDbContext>
             new CourseRepository(_context.StudentContext));
 
         //Act
-        var studentsWithCourses = sut.GetStudentsWithCourses();
+        var studentsWithCourses = await sut.GetStudentsWithCourses();
         var studentCourseData = _context.StudentContext.StudentCourses.ToList();
 
         //Assert
