@@ -22,17 +22,17 @@ public class CourseController : ControllerBase
 
     [Route("")]
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var courses = _courseService.GetCourses();
+        var courses = await _courseService.GetCourses();
         return new OkObjectResult(courses);
     }
 
     [Route("{courseId}")]
     [HttpGet]
-    public IActionResult GetCourse([FromRoute] long courseId)
+    public async Task<IActionResult> GetCourse([FromRoute] long courseId)
     {
-        var courses = _courseService.GetCourses(courseId);
+        var courses = await _courseService.GetCourses(courseId);
         var course = courses.FirstOrDefault();
 
         return course == null ? new NotFoundResult() : new OkObjectResult(course);

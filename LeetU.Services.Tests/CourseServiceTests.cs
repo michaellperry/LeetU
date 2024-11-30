@@ -18,14 +18,14 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
     }
 
     [Fact]
-    public void ShouldGetCourses()
+    public async void ShouldGetCourses()
     {
         //Arrange
         _context.Reset();
         var sut = new CourseService(new CourseRepository(_context.StudentContext));
 
         //Act
-        var courses = sut.GetCourses();
+        var courses = await sut.GetCourses();
 
         //Act
         Assert.Equal(_context.StudentContext.Courses.Count(), courses.Count());
@@ -37,14 +37,15 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void ShouldGetCoursesById(int courseId)
+    public async void ShouldGetCoursesById(int courseId)
     {
         //Arrange
         _context.Reset();
         var sut = new CourseService(new CourseRepository(_context.StudentContext));
 
         //Act
-        var course = sut.GetCourses(courseId).FirstOrDefault();
+        var courses = await sut.GetCourses(courseId);
+        var course = courses.FirstOrDefault();
 
         //Act
         Assert.Equal(courseId, course!.Id);
@@ -67,7 +68,8 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
 
         await sut.SetCourseAsync(newCourse);
 
-        var course = sut.GetCourses().LastOrDefault();
+        var courses = await sut.GetCourses();
+        var course = courses.LastOrDefault();
 
         //Assert
         Assert.Equal("NewCourse", course!.Name);
@@ -82,12 +84,13 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
         _context.Reset();
         var sut = new CourseService(new CourseRepository(_context.StudentContext));
         //Act
-        var course = sut.GetCourses().FirstOrDefault();
+        var courses = await sut.GetCourses();
+        var course = courses.FirstOrDefault();
         course!.Name = "UpdatedCourseName";
         course.Description = "UpdatedCourseDescription";
         course.StartDate = DateTime.Parse("01/01/2021");
         await sut.UpdateCourseAsync(course);
-        var updatedCourse = sut.GetCourses().FirstOrDefault();
+        var updatedCourse = courses.FirstOrDefault();
         //Assert
         Assert.Equal("UpdatedCourseName", updatedCourse!.Name);
         Assert.Equal("UpdatedCourseDescription", updatedCourse.Description);
@@ -101,7 +104,8 @@ public class CourseServiceTests : IClassFixture<InMemoryDbContext>
         _context.Reset();
         var sut = new CourseService(new CourseRepository(_context.StudentContext));
         //Act
-        var course = sut.GetCourses().FirstOrDefault();
+        var courses = await sut.GetCourses();
+        var course = courses.FirstOrDefault();
         //Assert
         await Assert.ThrowsAsync<Exception>(async () => await sut.DeleteCourseAsync(course!.Id));
     }

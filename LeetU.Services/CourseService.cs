@@ -18,12 +18,11 @@ public class CourseService : ICourseService
         _courseRepository = courseRepository;
     }
 
-    public IEnumerable<Course> GetCourses(params long[] courseIds)
+    public async Task<IEnumerable<Course>> GetCourses(params long[] courseIds)
     {
         var courses = _courseRepository.Get(c => courseIds.Any(id => c.Id == id) || courseIds.Length == 0);
 
-        foreach (var entity in courses)
-            yield return EntityToModel.CreateCourseFromEntity(entity);
+        return courses.Select(EntityToModel.CreateCourseFromEntity);
     }
 
     public async Task<int> SetCourseAsync(Course course)
