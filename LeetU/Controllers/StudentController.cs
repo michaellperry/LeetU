@@ -46,6 +46,15 @@ public class StudentController : ControllerBase
         return !students.Any() ? new NotFoundResult() : new OkObjectResult(students.FirstOrDefault());
     }
 
+    [Route("{studentId}")]
+    [HttpPut]
+    public async Task<IActionResult> UpdateStudent([FromRoute] long studentId, [FromBody] Models.Student student)
+    {
+        student.Id = studentId;
+        var rowsAffected = await _studentService.UpdateStudentAsync(student);
+        return rowsAffected == 0 ? new NotFoundResult() : new OkResult();
+    }
+
     [Route("{studentId}/course/{courseId}")]
     [HttpPost]
     public async Task<IActionResult> SetStudentCourse([FromRoute] long studentId, [FromRoute] long courseId)

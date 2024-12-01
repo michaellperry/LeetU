@@ -8,4 +8,5 @@ public interface IStudentService
     Task<IEnumerable<StudentWithCourses>> GetStudentsWithCourses(params long[] studentIds);
     Task<int> SetStudentCourseAsync(long studentId, long courseId);
     Task<bool> HasCourse(long studentId, long courseId);
+    Task<int> UpdateStudentAsync(Student student);
 }
