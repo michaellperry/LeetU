@@ -14,4 +14,6 @@ public class StudentRepository : RepositoryCrud<Student>, IStudentRepositoryCrud
     public StudentRepository(StudentContext context) : base(context)
     {
     }
+
+    public DbSet<T> Set<T>() where T : class => Context.Set<T>();
 }
